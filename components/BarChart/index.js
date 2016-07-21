@@ -37,8 +37,8 @@ export class BarChart extends React.Component{
 
   yScale(barData, d, height){
     var yScaler = d3.scale.linear()
-              .domain([0, d3.max(barData)])
-              .range([0, height])
+                    .domain([0, d3.max(barData)])
+                    .range([0, height])
     return yScaler(d)
   }
 
@@ -58,35 +58,35 @@ export class BarChart extends React.Component{
           barOffset = 5;
 
       var xScale = d3.scale.ordinal()
-              .domain(d3.range(0, barData.length))
-              .rangeBands([0, width], .1)
+                     .domain(d3.range(0, barData.length))
+                     .rangeBands([0, width], .1)
 
       var color = that.assignColor(barData)
 
       var tooltip = d3.select("#"+that.props.chartID)
-              .append('div')
-              .style('position', 'absolute')
-              .style('padding', '0 10px')
-              .style('background', 'white')
-              .style('opacity', 0)
+                      .append('div')
+                      .style('position', 'absolute')
+                      .style('padding', '0 10px')
+                      .style('background', 'white')
+                      .style('opacity', 0)
 
       var barChart = d3.select("#"+that.props.chartID)
-        .append('svg')
-        .style('background', '#E7E0CB')
-          .classed('svg'+that.props.chartID, true)
-          .attr('width', width + margin.left + margin.right)
-          .attr('height', height + margin.top + margin.bottom )
-          .append('g')
-          .attr('transform', 'translate('+ margin.left+', '+margin.top+')')
-          .selectAll('rect').data(barData)
-          .enter().append('rect')
-            .style('fill', that.colorStyle( color ))
-            .attr('width', xScale.rangeBand())
-            .attr('height', 0)
-            .attr('x', function(d, i){
-              return xScale(i)
-            })
-            .attr('y', height)
+                       .append('svg')
+                       .style('background', '#E7E0CB')
+                          .classed('svg'+that.props.chartID, true)
+                          .attr('width', width + margin.left + margin.right)
+                          .attr('height', height + margin.top + margin.bottom )
+                          .append('g')
+                          .attr('transform', 'translate('+ margin.left+', '+margin.top+')')
+                          .selectAll('rect').data(barData)
+                          .enter().append('rect')
+                            .style('fill', that.colorStyle( color ))
+                            .attr('width', xScale.rangeBand())
+                            .attr('height', 0)
+                            .attr('x', function(d, i){
+                              return xScale(i)
+                            })
+                            .attr('y', height)
 
       .on('mouseover', function(d){
         tooltip.transition()
@@ -98,7 +98,6 @@ export class BarChart extends React.Component{
         
         d3.select(this)
           .style('opacity', .5)
-
       })
 
       .on('mouseout', function(d){
@@ -124,13 +123,20 @@ export class BarChart extends React.Component{
 
 
       var vGuideScale = d3.scale.linear()
-        .domain([0, d3.max(barData)])
-        .range([height, 0])
+                          .domain([0, d3.max(barData)])
+                          .range([height, 0])
 
       var vAxis = d3.svg.axis()
-        .scale(vGuideScale)
-        .orient('left')
-        .ticks(10)
+                    .scale(vGuideScale)
+                    .orient('left')
+                    .ticks(10)
+
+      var hAxis = d3.svg.axis()
+                    .scale(xScale)
+                    .orient('bottom')
+                    .ticks(xScale.domain().filter(function(d,i){
+                      return !(i% (barData.length/5));
+                    }))
 
       var vGuide = d3.select('.svg'+that.props.chartID).append('g')
         vAxis(vGuide)
@@ -140,12 +146,7 @@ export class BarChart extends React.Component{
         vGuide.selectAll('line')
           .style({ stroke: "#000"})
 
-      var hAxis = d3.svg.axis()
-        .scale(xScale)
-        .orient('bottom')
-        .tickValues(xScale.domain().filter(function(d,i){
-          return !(i% (barData.length/5));
-        }))
+      
 
       var hGuide = d3.select('.svg'+that.props.chartID).append('g')
         hAxis(hGuide)
