@@ -13,8 +13,8 @@ npm start
 ```
 Navigate to localhost:3333 in your browser
 
-### Technologies Used
-This project uses D3 for creating the different graphics and react to make all the different components. In order to import data from an external source, like google sheets or excel, I'm going to need to use cors (cross-origin HTTP request). I haven't implemented it yet but it will be the next bit of technology.   
+### Method
+This project uses D3 for creating the different graphics and utilizes react for it's component architecture. Data is being pulled from a tsv file for the time being. In order to import data from an external source, like google sheets or excel, I'm going to need to use cors (cross-origin HTTP request). The goal is to be able to set your datasource and customize you chart with a set of props. 
 
 ### Skills Learned
 * How to make Bar charts and Pie charts 
