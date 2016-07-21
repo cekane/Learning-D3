@@ -16,6 +16,8 @@ Navigate to localhost:3333 in your browser
 ### Method
 This project uses D3 for creating the different graphics and utilizes react for it's component architecture. Data is being pulled from a tsv file for the time being. In order to import data from an external source, like google sheets or excel, I'm going to need to use cors (cross-origin HTTP request). The goal is to be able to set your datasource and customize you chart with a set of props. 
 
+I briefly looked into the force attributes that are provided with D3. It ended up looking sort of like a molecular structure. 
+
 ### Skills Learned
 * How to make Bar charts and Pie charts 
 * How to manipulate D3 Animations
