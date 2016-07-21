@@ -35,13 +35,6 @@ export class BarChart extends React.Component{
     }
   }
 
-  yScale(barData, d, height){
-    var yScaler = d3.scale.linear()
-                    .domain([0, d3.max(barData)])
-                    .range([0, height])
-    return yScaler(d)
-  }
-
   componentDidMount(){
     var barData = []
     const that =this
@@ -56,6 +49,9 @@ export class BarChart extends React.Component{
         barData.push(k.Value)
       })
 
+      var yScale = d3.scale.linear()
+                    .domain([0, d3.max(barData)])
+                    .range([0, height])
 
       var xScale = d3.scale.ordinal()
                      .domain(d3.range(0, barData.length))
@@ -110,10 +106,10 @@ export class BarChart extends React.Component{
 
       barChart.transition()
         .attr('height', function(d){
-              return that.yScale(barData, d, height);
+              return yScale(d);
           })
         .attr('y', function(d){
-              return height - that.yScale(barData, d, height);
+              return height - yScale(d);
           })
         .delay(function(d, i){
           return i * 10;

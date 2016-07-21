@@ -37,7 +37,6 @@ export class VerticalBarChart extends React.Component{
   setWidth(){
     switch( this.props.width ){
       case 'small':
-        console.log("in here")
         return 350;
       case 'medium':
         return 500;
@@ -120,7 +119,6 @@ export class VerticalBarChart extends React.Component{
               return yScale(d);
           })
         .attr('y', function(d, i){
-          console.log(xScale(i))
           return xScale(i)
         })
         .delay(function(d, i){

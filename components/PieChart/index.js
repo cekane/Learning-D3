@@ -19,7 +19,7 @@ export class PieChart extends React.Component{
       {label: "Barot", value: 50},
       {label: "Pete", value: 190},
       {label: "Garrot", value: 50},
-      {label: "Barot", value: 80}
+      {label: "Darot", value: 80}
     ]
 
     var pie = d3.layout.pie()
@@ -44,6 +44,7 @@ export class PieChart extends React.Component{
           return colors(i);
         })
         .attr('d', arc)
+
   }
 
   render () {
