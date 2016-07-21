@@ -1,11 +1,10 @@
 import React from 'react'
 
-import { oContainer } from './BarChart.scss'
-
+import { oContainer } from './VerticalBarChart.scss'
 
 import className from 'classnames'
 
-export class BarChart extends React.Component{
+export class VerticalBarChart extends React.Component{
   constructor(props){
     super(props);
   }
@@ -35,31 +34,41 @@ export class BarChart extends React.Component{
     }
   }
 
-  yScale(barData, d, height){
-    var yScaler = d3.scale.linear()
-                    .domain([0, d3.max(barData)])
-                    .range([0, height])
-    return yScaler(d)
+  setWidth(){
+    switch( this.props.width ){
+      case 'small':
+        console.log("in here")
+        return 350;
+      case 'medium':
+        return 500;
+      case 'large':
+        return 750;
+    }
   }
 
   componentDidMount(){
     var barData = []
     const that =this
     var margin = { top: 30, right: 30 , bottom: 40, left: 50 }
-    var height = 400 - margin.top - margin.bottom,
-        width = 900 - margin.left - margin.right,
+    var height = 900 - margin.left - margin.right,
+        width = this.setWidth(), 
         barWidth = 50,
         barOffset = 5;
+        
+    width = width - margin.top - margin.bottom
 
     d3.tsv('./components/BarChart/Data/data.tsv', function(data){
       data.map(k=>{
         barData.push(k.Value)
       })
 
+      var yScale = d3.scale.linear()
+                    .domain([0, d3.max(barData)])
+                    .range([0, width])
 
       var xScale = d3.scale.ordinal()
                      .domain(d3.range(0, barData.length))
-                     .rangeBands([0, width], .1)
+                     .rangeBands([0, height], .1)
 
       var color = that.assignColor(barData)
 
@@ -81,11 +90,9 @@ export class BarChart extends React.Component{
                           .selectAll('rect').data(barData)
                           .enter().append('rect')
                             .style('fill', that.colorStyle( color ))
-                            .attr('width', xScale.rangeBand())
-                            .attr('height', 0)
-                            .attr('x', function(d, i){
-                              return xScale(i)
-                            })
+                            .attr('width', 0)
+                            .attr('height', xScale.rangeBand())
+                            .attr('x', 0)
                             .attr('y', height)
 
       .on('mouseover', function(d){
@@ -109,48 +116,42 @@ export class BarChart extends React.Component{
       })
 
       barChart.transition()
-        .attr('height', function(d){
-              return that.yScale(barData, d, height);
+        .attr('width', function(d){
+              return yScale(d);
           })
-        .attr('y', function(d){
-              return height - that.yScale(barData, d, height);
-          })
+        .attr('y', function(d, i){
+          console.log(xScale(i))
+          return xScale(i)
+        })
         .delay(function(d, i){
           return i * 10;
         })
         .duration(1000)
         .ease('elastic')
 
-
-      var vGuideScale = d3.scale.linear()
-                          .domain([0, d3.max(barData)])
-                          .range([height, 0])
-
       var vAxis = d3.svg.axis()
-                    .scale(vGuideScale)
-                    .orient('left')
+                    .scale(yScale)
+                    .orient('bottom')
                     .ticks(10)
 
       var hAxis = d3.svg.axis()
                     .scale(xScale)
-                    .orient('bottom')
+                    .orient('left')
                     .ticks(xScale.domain().filter(function(d,i){
                       return !(i% (barData.length/5));
                     }))
 
       var vGuide = d3.select('.svg'+that.props.chartID).append('g')
         vAxis(vGuide)
-        vGuide.attr('transform', 'translate('+ margin.left + ',' + margin.top +')')
+        vGuide.attr('transform', 'translate('+ margin.left + ',' + (height + margin.top) +')')
         vGuide.selectAll('path')
           .style({ fill:'none' , stroke: "#000"})
         vGuide.selectAll('line')
           .style({ stroke: "#000"})
 
-      
-
       var hGuide = d3.select('.svg'+that.props.chartID).append('g')
         hAxis(hGuide)
-        hGuide.attr('transform', 'translate('+ margin.left + ',' + (height + margin.top) +')')
+        hGuide.attr('transform', 'translate('+ margin.left + ',' + margin.top +')')
         hGuide.selectAll('path')
           .style({ fill:'none' , stroke: "#000"})
         hGuide.selectAll('line')

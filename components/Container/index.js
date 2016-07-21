@@ -5,6 +5,7 @@ import { PracticeD3 } from '../PracticeD3'
 import { PracticeSVG } from '../PracticeSVG'
 import { BarChart } from '../BarChart'
 import { PieChart } from '../PieChart'
+import { VerticalBarChart } from '../VerticalBarChart'
 import { box, chart, oContainer, flexContainer } from './Container.scss'
 
 export class Container extends React.Component {
@@ -48,6 +49,9 @@ export class Container extends React.Component {
           <BarChart chartID={'chart1'} colorAlign={ 'horizontal' } title={ 'Barchart Horizontal Colors' }/>
           <BarChart chartID={'chart2'} colorAlign={ 'vertical' } title={ 'Barchart Vertical Colors' }/>
           <PieChart chartID={'chart3'} title={ 'Pie Chart' } />
+          <VerticalBarChart width={ 'small' } chartID={'chart4'} colorAlign={ 'vertical' } title={ 'Vertically Aligned Barchart' }/>
+          <VerticalBarChart width={ 'medium' } chartID={'chart5'} colorAlign={ 'vertical' } title={ 'Vertically Aligned Barchart' }/>
+          <VerticalBarChart width={ 'large' } chartID={'chart6'} colorAlign={ 'vertical' } title={ 'Vertically Aligned Barchart' }/>
         </div>
       </div>
     );
